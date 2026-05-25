@@ -1,0 +1,197 @@
+<main class="checkout-shell" aria-labelledby="checkout-title">
+  <header class="checkout-header">
+    <div>
+      <p class="checkout-kicker">✨ Winkelshop</p>
+      <h1 id="checkout-title">🧾 Magischer Checkout</h1>
+      <p class="checkout-subline">Pruefe deinen Warenkorb und schliesse deine Bestellung ab. 🌙</p>
+    </div>
+
+    <div class="account-pill" aria-label="Angemeldetes Konto">
+      @if (currentUser(); as user) {
+        <p class="account-name">{{ user.name }}</p>
+        <p class="account-email">{{ user.email }}</p>
+      }
+      <div class="account-actions">
+        <a routerLink="/" class="back-link">🏰 Zurueck zum Shop</a>
+        <button type="button" class="logout-button" (click)="logout()">🚪 Logout</button>
+      </div>
+    </div>
+  </header>
+
+  @if (cartErrorMessage(); as message) {
+    <section class="message-card error" role="alert" aria-live="assertive">
+      <h2>⚠️ Warenkorb nicht verfuegbar</h2>
+      <p>{{ message }}</p>
+    </section>
+  }
+
+  <section class="checkout-layout" aria-label="Checkout-Inhalte">
+    <section class="cart-panel" aria-labelledby="cart-title">
+      <div class="panel-header">
+        <h2 id="cart-title">🧺 Dein Warenkorb</h2>
+        <p>{{ cartItems().length }} Position(en)</p>
+      </div>
+
+      @if (hasCartItems()) {
+        <ul class="cart-list" aria-label="Warenkorbliste">
+          @for (item of cartItems(); track trackByCartItemId($index, item)) {
+            <li class="cart-item">
+              <div class="item-main">
+                <h3>{{ item.name }}</h3>
+                <p class="item-unit-price">Einzelpreis: {{ formatPrice(item.unitPrice, cart().currency) }}</p>
+              </div>
+
+              <div class="item-actions">
+                <label [attr.for]="'qty-' + item.itemId">Menge</label>
+                <input
+                  [id]="'qty-' + item.itemId"
+                  type="number"
+                  min="1"
+                  inputmode="numeric"
+                  [value]="quantityInputValue(item.itemId, item.quantity)"
+                  (input)="onQuantityInput(item.itemId, $event)"
+                />
+                <button
+                  type="button"
+                  class="secondary-button"
+                  [disabled]="currentlyUpdatingItemId() === item.itemId"
+                  (click)="updateItemQuantity(item)"
+                >
+                  @if (currentlyUpdatingItemId() === item.itemId) {
+                    ✨ Speichern...
+                  } @else {
+                    💾 Speichern
+                  }
+                </button>
+                <button
+                  type="button"
+                  class="danger-button"
+                  [disabled]="currentlyRemovingItemId() === item.itemId"
+                  (click)="removeItem(item.itemId)"
+                >
+                  @if (currentlyRemovingItemId() === item.itemId) {
+                    🫥 Entfernen...
+                  } @else {
+                    ❌ Entfernen
+                  }
+                </button>
+              </div>
+
+              <p class="item-subtotal">{{ formatPrice(itemSubtotal(item), cart().currency) }}</p>
+            </li>
+          }
+        </ul>
+
+        <div class="cart-total">
+          <span>💰 Gesamtsumme</span>
+          <strong>{{ formatPrice(cart().totalPrice, cart().currency) }}</strong>
+        </div>
+      } @else {
+        <div class="message-card inline" aria-live="polite">
+          <h3>🫧 Warenkorb ist leer</h3>
+          <p>Lege zuerst Produkte in den Warenkorb, bevor du zur Kasse gehst.</p>
+          <a routerLink="/" class="back-link">🔮 Produkte ansehen</a>
+        </div>
+      }
+
+      @if (cartMessage(); as message) {
+        <p class="status-message" aria-live="polite">{{ message }}</p>
+      }
+    </section>
+
+    <section class="checkout-panel" aria-labelledby="checkout-form-title">
+      <h2 id="checkout-form-title">🪄 Versand und Zahlung</h2>
+
+      <form [formGroup]="checkoutForm" (ngSubmit)="submitCheckout()" novalidate>
+        <div class="form-field">
+          <label for="payment-method">💳 Zahlungsart</label>
+          <select id="payment-method" formControlName="paymentMethod">
+            <option value="credit-card">Kreditkarte</option>
+            <option value="invoice">Rechnung</option>
+          </select>
+        </div>
+
+        <div class="shipping-grid" formGroupName="shippingAddress">
+          <div class="form-field">
+             <label for="fullName">👤 Vollstaendiger Name</label>
+            <input
+              id="fullName"
+              type="text"
+              formControlName="fullName"
+              autocomplete="name"
+              [attr.aria-invalid]="hasFieldError(shippingAddressForm().controls.fullName)"
+            />
+          </div>
+
+          <div class="form-field">
+             <label for="street">🛣️ Strasse</label>
+            <input
+              id="street"
+              type="text"
+              formControlName="street"
+              autocomplete="street-address"
+              [attr.aria-invalid]="hasFieldError(shippingAddressForm().controls.street)"
+            />
+          </div>
+
+          <div class="form-field">
+             <label for="city">🏙️ Stadt</label>
+            <input
+              id="city"
+              type="text"
+              formControlName="city"
+              autocomplete="address-level2"
+              [attr.aria-invalid]="hasFieldError(shippingAddressForm().controls.city)"
+            />
+          </div>
+
+          <div class="form-field">
+             <label for="postalCode">📮 PLZ</label>
+            <input
+              id="postalCode"
+              type="text"
+              formControlName="postalCode"
+              autocomplete="postal-code"
+              [attr.aria-invalid]="hasFieldError(shippingAddressForm().controls.postalCode)"
+            />
+          </div>
+
+          <div class="form-field shipping-country">
+             <label for="country">🌍 Land</label>
+            <input
+              id="country"
+              type="text"
+              formControlName="country"
+              autocomplete="country-name"
+              [attr.aria-invalid]="hasFieldError(shippingAddressForm().controls.country)"
+            />
+          </div>
+        </div>
+
+        <button type="submit" class="submit-button" [disabled]="isSubmittingCheckout() || !hasCartItems()">
+          @if (isSubmittingCheckout()) {
+            ✨ Bestellung wird abgeschickt...
+          } @else {
+            🛒 Jetzt bestellen
+          }
+        </button>
+      </form>
+
+      @if (checkoutErrorMessage(); as message) {
+        <div class="message-card error inline" role="alert" aria-live="assertive">
+          <p>{{ message }}</p>
+        </div>
+      }
+
+      @if (checkoutResult(); as result) {
+        <div class="message-card success inline" aria-live="polite">
+          <h3>🎉 Bestellung erfolgreich aufgegeben</h3>
+          <p>Bestellnummer: {{ result.order.id }}</p>
+          <p>Status: {{ result.order.status }}</p>
+          <p>Gesamt: {{ formatPrice(result.order.total, result.order.currency) }}</p>
+          <p>Positionen: {{ result.items.length }}</p>
+        </div>
+      }
+    </section>
+  </section>
+</main>

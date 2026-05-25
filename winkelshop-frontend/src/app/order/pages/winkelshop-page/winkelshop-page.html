@@ -1,0 +1,114 @@
+<main class="winkelshop-shell" aria-labelledby="winkelshop-title">
+  <header class="winkelshop-header">
+    <div class="header-row">
+      <div>
+        <h1 id="winkelshop-title">🧙 Winkelshop</h1>
+        <p class="shop-subline">Entdecke unseren magische Produkte! 🌙</p>
+      </div>
+
+      @if (currentUser(); as user) {
+        <div class="account-pill" aria-label="Angemeldetes Konto">
+          <p class="account-name">{{ user.name }}</p>
+          <p class="account-email">{{ user.email }}</p>
+          @if (hasCartItems() && cartSummary(); as cart) {
+            <p class="account-cart-total">🧺 Warenkorb: {{ formatPrice(cart.totalPrice, cart.currency) }}</p>
+          }
+          <a class="checkout-link" routerLink="/checkout">🪄 Zum Checkout</a>
+          <button type="button" class="logout-button" (click)="logout()">🚪 Logout</button>
+        </div>
+      } @else {
+        <div class="account-pill" aria-label="Nicht angemeldet">
+          <p class="account-name">🫥 Gastmodus</p>
+          <p class="account-email">Produkte ansehen ohne Anmeldung.</p>
+          <a class="login-link" routerLink="/login">🔐 Zum Login</a>
+        </div>
+      }
+    </div>
+  </header>
+
+  @if (combinedErrorMessage(); as errorMessage) {
+    <section class="message-card error" aria-live="assertive">
+      <h2>⚠️ Daten nicht verfuegbar</h2>
+      <p>{{ errorMessage }}</p>
+      <p>Pruefe, ob das Backend unter `http://localhost:8080` laeuft.</p>
+    </section>
+  }
+
+  <section class="winkelshop-layout" aria-label="Produktkatalog">
+    <aside class="category-panel" aria-labelledby="category-title">
+      <h2 id="category-title">📚 Kategorien</h2>
+
+      <button
+        type="button"
+        class="category-button"
+        [class.active]="selectedCategoryId() === null"
+        (click)="showAllCategories()"
+      >
+        🌌 Alle Kategorien
+      </button>
+
+      @for (category of categories(); track trackByCategoryId($index, category)) {
+        <button
+          type="button"
+          class="category-button"
+          [class.active]="selectedCategoryId() === category.id"
+          [attr.aria-pressed]="selectedCategoryId() === category.id"
+          (click)="selectCategory(category.id)"
+        >
+          <span class="category-name">{{ category.name }}</span>
+          <span class="category-description">{{ category.description }}</span>
+        </button>
+      }
+    </aside>
+
+    <section class="products-panel" [attr.aria-labelledby]="'products-title'">
+      <div class="products-headline">
+        <h2 id="products-title">🧪 Produkte</h2>
+        <p>{{ selectedCategoryName() }}</p>
+      </div>
+
+      @if (hasProducts()) {
+        <ul class="product-grid" aria-label="Produktliste">
+          @for (product of products(); track trackByProductId($index, product)) {
+            <li class="product-card">
+              <div class="product-image" aria-hidden="true">
+                <span>{{ productInitial(product.name) }}</span>
+              </div>
+              <div class="product-content">
+                <h3>{{ product.name }}</h3>
+                <p class="product-description">{{ product.description }}</p>
+                <div class="product-meta">
+                  <p class="product-price">{{ formatPrice(product.price, product.currency) }}</p>
+                  <p class="product-stock" [class.available]="product.inStock" [class.unavailable]="!product.inStock">
+                    @if (product.inStock) {
+                      Verfuegbar ({{ product.stock }})
+                    } @else {
+                      Nicht verfuegbar
+                    }
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  class="add-to-cart-button"
+                  [disabled]="!product.inStock"
+                  (click)="addToCart(product.id)"
+                >
+                    🧺 In den Warenkorb
+                </button>
+              </div>
+            </li>
+          }
+        </ul>
+
+        @if (cartMessage(); as message) {
+          <p class="cart-message" aria-live="polite">{{ message }}</p>
+        }
+      } @else {
+        <div class="message-card" aria-live="polite">
+          <h3>🔍 Keine Produkte gefunden</h3>
+          <p>Fuer diese Kategorie sind aktuell keine Produkte vorhanden.</p>
+        </div>
+      }
+    </section>
+  </section>
+</main>
