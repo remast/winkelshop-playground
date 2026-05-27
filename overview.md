@@ -8,13 +8,13 @@ Ein Online-Shop für magischen Bedarf (Zauberstäbe, Bücher, Tränke, Roben u. 
 
 Für Demo- und Testzwecke ist **keine Registrierung** vorgesehen. Stattdessen stehen folgende Käufer-Accounts bereit:
 
-| Name | E-Mail | Passwort | Rolle |
-|------|--------|----------|-------|
-| Harry Potter | harry.potter@hogwarts.test | Expelliarmus123! | Käufer |
-| Hermione Granger | hermione.granger@hogwarts.test | Expelliarmus123! | Käufer |
-| Ron Weasley | ron.weasley@hogwarts.test | Expelliarmus123! | Käufer |
-| Draco Malfoy | draco.malfoy@hogwarts.test | Expelliarmus123! | Käufer |
-| Luna Lovegood | luna.lovegood@hogwarts.test | Expelliarmus123! | Käufer |
+| Name | E-Mail                     | Passwort | Rolle |
+|------|----------------------------|----------|-------|
+| Harry Potter | harry@hog.warts            | 123 | Käufer |
+| Hermione Granger | hermione@hog.warts | 123 | Käufer |
+| Ron Weasley | ron@hog.warts    | 123 | Käufer |
+| Draco Malfoy | draco@hog.warts  | 123 | Käufer |
+| Luna Lovegood | luna@hog.warts   | 123 | Käufer |
 
 ---
 
