@@ -44,3 +44,8 @@ Persistence mappings
 
 * Nutze Arrange/Act/Assert Pattern
 * Nutze Hamcrest Matcher
+
+
+## Build
+
+Nutze Build Tool Maven mit `mvnw` Wrapper für Build und Test
