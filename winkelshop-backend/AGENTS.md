@@ -7,31 +7,31 @@
 * Innerhalb einer Business Component "Order" gibt es die Packages Boundary, Control und Entity
 * Zugriffe sind nur erlaubt von Boundary → Control → Entity
 
-### Boundary
+### Boundary Layer
 The boundary layer serves as the entry point for external actors (users, other systems, schedulers, message brokers, ...), providing appropriate interfaces (REST APIs, GraphQL endpoints, message handlers, Lambda function handlers, web components / custom elements, etc.) depending on the actor type.
 
-Exposes the functionality of components to users and systems.
-User interfaces and API endpoints
-Input validation and transformation
-Coarse-grained operations
+* Exposes the functionality of components to users and systems.
+* User interfaces and API endpoints
+* Input validation and transformation
+* Coarse-grained operations
 
 Naming: REST Controllers are named like `CartController`
 
-### Control
+### Control Layer
 The orchestration layer containing business logic
 
-Actions / commands
-Stateless procedural logic
+* Actions / commands
+* Stateless procedural logic
 
 Naming: Services are named like `OrderService`
 
-### Entity
-The domain model layer representing core business concepts
+### Entity Layer
+The domain model layer representing core business concepts.
 
-Application data
-Domain objects and data classes
-Business entities
-Persistence mappings
+* Application data
+* Domain objects and data classes
+* Business entities
+* Persistence mappings
 
 ## Coding Konventionen
 
@@ -42,5 +42,5 @@ Persistence mappings
 
 ## Test Konventionen
 
-* Nutze Arrange/Act/Assert Pattern
-* Nutze Hamcrest Matcher
+* Nutze Arrange/Act/Assert Pattern in jedem Unit Test
+* Nutze immer Hamcrest Matcher
