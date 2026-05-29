@@ -14,6 +14,8 @@ export interface CartItem {
 export interface CartData {
   items: CartItem[];
   currency: string;
+  subtotalPrice: number;
+  discountAmount: number;
   totalPrice: number;
 }
 

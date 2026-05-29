@@ -234,13 +234,27 @@ select {
   font-weight: 700;
 }
 
-.cart-total {
+.cart-summary {
   margin-top: 0.85rem;
   border-top: 1px solid var(--border);
   padding-top: 0.8rem;
+  display: grid;
+  gap: 0.4rem;
+}
+
+.cart-summary p {
+  margin: 0;
   display: flex;
   justify-content: space-between;
   align-items: baseline;
+}
+
+.cart-discount {
+  color: var(--success);
+}
+
+.cart-total {
+  font-size: 1.08rem;
 }
 
 form {

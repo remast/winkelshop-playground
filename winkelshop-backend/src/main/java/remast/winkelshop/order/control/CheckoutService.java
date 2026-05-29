@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import remast.winkelshop.order.entity.Currency;
+import remast.winkelshop.order.entity.Cart;
 import remast.winkelshop.order.entity.OrderEntity;
 import remast.winkelshop.order.entity.OrderItemEntity;
 import remast.winkelshop.order.entity.OrderItemRepository;
@@ -35,15 +36,15 @@ public class CheckoutService {
                                    String shippingCountry) {
         var cartItems = cartControl.consumeCart(userId);
         var products = new HashMap<UUID, ProductEntity>();
-        var total = cartItems.stream()
+        var cartLines = cartItems.stream()
                 .map(item -> {
                     var product = productRepository.findById(item.productId())
                             .orElseThrow();
                     products.put(item.productId(), product);
-                    return item.unitPrice() * item.quantity();
+                    return new Cart.CartItemLine(item.itemId(), item.productId(), product.name(), item.quantity(), item.unitPrice());
                 })
-                .mapToDouble(Double::doubleValue)
-                .sum();
+                .toList();
+        var cart = new Cart(cartLines, Currency.GALLEON);
         var orderId = UUID.randomUUID();
         var createdAt = Instant.now();
 
@@ -52,7 +53,8 @@ public class CheckoutService {
                 userId,
                 "placed",
                 paymentMethod,
-                total,
+                cart.totalPrice(),
+                cart.discountAmount(),
                 Currency.GALLEON.name(),
                 shippingFullName,
                 shippingStreet,

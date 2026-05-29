@@ -1,0 +1,2 @@
+ALTER TABLE orders
+    ADD COLUMN discount_total DECIMAL(10,2) NOT NULL DEFAULT 0;

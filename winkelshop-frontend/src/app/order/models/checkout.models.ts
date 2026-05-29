@@ -17,6 +17,7 @@ export interface CheckoutOrder {
   status: string;
   paymentMethod: string;
   total: number;
+  discountTotal: number;
   currency: string;
   shippingFullName: string;
   shippingStreet: string;

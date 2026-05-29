@@ -82,9 +82,19 @@
           }
         </ul>
 
-        <div class="cart-total">
-          <span>💰 Gesamtsumme</span>
-          <strong>{{ formatPrice(cart().totalPrice, cart().currency) }}</strong>
+        <div class="cart-summary" aria-label="Bestellsumme">
+          <p>
+            <span>Zwischensumme</span>
+            <strong>{{ formatPrice(cart().subtotalPrice, cart().currency) }}</strong>
+          </p>
+          <p class="cart-discount">
+            <span>Mengenrabatt ab 5 gleichen Produkten</span>
+            <strong>-{{ formatPrice(cart().discountAmount, cart().currency) }}</strong>
+          </p>
+          <p class="cart-total">
+            <span>💰 Gesamtsumme</span>
+            <strong>{{ formatPrice(cart().totalPrice, cart().currency) }}</strong>
+          </p>
         </div>
       } @else {
         <div class="message-card inline" aria-live="polite">
@@ -188,6 +198,7 @@
           <h3>🎉 Bestellung erfolgreich aufgegeben</h3>
           <p>Bestellnummer: {{ result.order.id }}</p>
           <p>Status: {{ result.order.status }}</p>
+          <p>Mengenrabatt: -{{ formatPrice(result.order.discountTotal, result.order.currency) }}</p>
           <p>Gesamt: {{ formatPrice(result.order.total, result.order.currency) }}</p>
           <p>Positionen: {{ result.items.length }}</p>
         </div>

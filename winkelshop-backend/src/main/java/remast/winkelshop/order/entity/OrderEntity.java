@@ -13,6 +13,7 @@ public record OrderEntity(
         String status,
         @Column("payment_method") String paymentMethod,
         double total,
+        @Column("discount_total") double discountTotal,
         String currency,
         @Column("shipping_full_name") String shippingFullName,
         @Column("shipping_street") String shippingStreet,

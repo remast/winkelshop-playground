@@ -27,6 +27,8 @@ const EMPTY_CART_RESPONSE: CartResponse = {
   data: {
     items: [],
     currency: 'GALLEON',
+    subtotalPrice: 0,
+    discountAmount: 0,
     totalPrice: 0
   }
 };
