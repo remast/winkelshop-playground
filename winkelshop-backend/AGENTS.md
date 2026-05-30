@@ -35,7 +35,7 @@ Persistence mappings
 
 ## Coding Konventionen
 
-* Moderner Java Code für Java 25
+* Moderner Java Code für Java 21
 * Nutze var Keyword, Records
 * funktionaler Style mit Streams statt Schleifen
 
