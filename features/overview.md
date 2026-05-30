@@ -15,6 +15,7 @@ Für Demo- und Testzwecke ist **keine Registrierung** vorgesehen. Stattdessen st
 | Ron Weasley | ron@hog.warts    | 123 | Käufer |
 | Draco Malfoy | draco@hog.warts  | 123 | Käufer |
 | Luna Lovegood | luna@hog.warts   | 123 | Käufer |
+| Minerva McGonagall | admin@hog.warts | 123 | Admin |
 
 ---
 
@@ -24,8 +25,10 @@ Für Demo- und Testzwecke ist **keine Registrierung** vorgesehen. Stattdessen st
 |--------|-------------|
 | **Besucher** | Nicht eingeloggter Nutzer; kann stöbern und suchen |
 | **Käufer** | Eingeloggter Besucher; kann kaufen und Bestellungen einsehen |
+| **Admin** | Eingeloggter Verwaltungsnutzer; kann Produkte und Kategorien pflegen |
 
 Ein Käufer erbt alle Fähigkeiten eines Besuchers (Generalisierung).
+Ein Admin nutzt dieselbe Anmeldefunktion, erhält danach jedoch Zugriff auf den Administrationsbereich.
 
 ---
 
@@ -119,6 +122,42 @@ Ein Käufer erbt alle Fähigkeiten eines Besuchers (Generalisierung).
 
 ---
 
+## Use Cases – Adminbereich
+
+### UC-10: Adminbereich öffnen
+**Akteur:** Admin  
+**Ziel:** Zugriff auf Verwaltungsfunktionen erhalten  
+**Beschreibung:** Nach erfolgreicher Anmeldung öffnet der Admin einen geschützten Administrationsbereich mit Übersicht über Produkte und Kategorien.  
+**Vorbedingung:** Admin ist eingeloggt  
+**Ergebnis:** Admin-Dashboard wird angezeigt
+
+---
+
+### UC-11: Produkte verwalten
+**Akteur:** Admin  
+**Ziel:** Sortiment pflegen  
+**Beschreibung:** Der Admin kann Produkte anlegen, bearbeiten, aktivieren/deaktivieren oder löschen. Dabei verwaltet er Name, Beschreibung, Preis, Lagerbestand, Bild und Zuordnung zu Kategorien.  
+**Vorbedingung:** Admin ist eingeloggt  
+**Ergebnis:** Produktdaten wurden gespeichert und sind im Shop entsprechend sichtbar bzw. verborgen
+
+---
+
+### UC-12: Kategorien verwalten
+**Akteur:** Admin  
+**Ziel:** Produktkategorien strukturieren  
+**Beschreibung:** Der Admin kann Kategorien anlegen, umbenennen, beschreiben, aktivieren/deaktivieren oder löschen. Produkte können Kategorien zugeordnet bleiben oder nach einer Anpassung neu zugeordnet werden.  
+**Vorbedingung:** Admin ist eingeloggt  
+**Ergebnis:** Kategorienstruktur wurde aktualisiert
+
+---
+
+## Weiterfuehrende Spezifikationen
+
+- Backend: `features/admin_backend.md`
+- Frontend: `features/admin_frontend.md`
+
+---
+
 ## Datenbereiche (grobe Übersicht)
 
 | Entität | Wichtige Attribute |
@@ -142,4 +181,4 @@ Ein Käufer erbt alle Fähigkeiten eines Besuchers (Generalisierung).
 
 ---
 
-*Version 0.2 – Registrierung entfernt, Test-Accounts ergänzt*
+*Version 0.3 – Adminbereich für Produkt- und Kategorienverwaltung ergänzt*
