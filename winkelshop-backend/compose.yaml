@@ -1,1 +1,12 @@
-services: {}
+name: "winkelshop-backend"
+services:
+
+  postgres:
+    image: postgres:18
+    container_name: winkelshop-db
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=winkelshop
+      - POSTGRES_USER=winkelshop
+      - POSTGRES_PASSWORD=harry123
