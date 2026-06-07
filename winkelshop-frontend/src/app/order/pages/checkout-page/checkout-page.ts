@@ -1,27 +1,15 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { catchError, of, switchMap, tap } from 'rxjs';
+
+import { form, FormField, minLength, required, submit } from '@angular/forms/signals';
 
 import { AuthStateService } from '../../../auth/services/auth-state.service';
 import type { CartItem, CartResponse } from '../../models/cart.models';
 import type { CheckoutResponse } from '../../models/checkout.models';
 import { CartApiService } from '../../services/cart-api.service';
 import { CheckoutApiService } from '../../services/checkout-api.service';
-
-interface ShippingAddressFormModel {
-  fullName: FormControl<string>;
-  street: FormControl<string>;
-  city: FormControl<string>;
-  postalCode: FormControl<string>;
-  country: FormControl<string>;
-}
-
-interface CheckoutFormModel {
-  paymentMethod: FormControl<string>;
-  shippingAddress: FormGroup<ShippingAddressFormModel>;
-}
 
 const EMPTY_CART_RESPONSE: CartResponse = {
   data: {
@@ -33,7 +21,7 @@ const EMPTY_CART_RESPONSE: CartResponse = {
 
 @Component({
   selector: 'app-checkout-page',
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [FormField, RouterLink],
   templateUrl: './checkout-page.html',
   styleUrl: './checkout-page.css',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -60,33 +48,29 @@ export class CheckoutPage {
   protected readonly currentlyRemovingItemId = signal<string | null>(null);
   protected readonly isSubmittingCheckout = signal(false);
 
-  protected readonly checkoutForm = new FormGroup<CheckoutFormModel>({
-    paymentMethod: new FormControl('credit-card', {
-      nonNullable: true,
-      validators: [Validators.required]
-    }),
-    shippingAddress: new FormGroup<ShippingAddressFormModel>({
-      fullName: new FormControl('', {
-        nonNullable: true,
-        validators: [Validators.required, Validators.minLength(2)]
-      }),
-      street: new FormControl('', {
-        nonNullable: true,
-        validators: [Validators.required, Validators.minLength(2)]
-      }),
-      city: new FormControl('', {
-        nonNullable: true,
-        validators: [Validators.required, Validators.minLength(2)]
-      }),
-      postalCode: new FormControl('', {
-        nonNullable: true,
-        validators: [Validators.required, Validators.minLength(2)]
-      }),
-      country: new FormControl('', {
-        nonNullable: true,
-        validators: [Validators.required, Validators.minLength(2)]
-      })
-    })
+  protected readonly checkoutModel = signal({
+    paymentMethod: 'credit-card',
+    shippingAddress: {
+      fullName: '',
+      street: '',
+      city: '',
+      postalCode: '',
+      country: ''
+    }
+  });
+
+  protected readonly checkoutForm = form(this.checkoutModel, (s) => {
+    required(s.paymentMethod, { message: 'Zahlungsart ist erforderlich.' });
+    required(s.shippingAddress.fullName, { message: 'Vollstaendiger Name ist erforderlich.' });
+    minLength(s.shippingAddress.fullName, 2, { message: 'Name muss mindestens 2 Zeichen lang sein.' });
+    required(s.shippingAddress.street, { message: 'Strasse ist erforderlich.' });
+    minLength(s.shippingAddress.street, 2, { message: 'Strasse muss mindestens 2 Zeichen lang sein.' });
+    required(s.shippingAddress.city, { message: 'Stadt ist erforderlich.' });
+    minLength(s.shippingAddress.city, 2, { message: 'Stadt muss mindestens 2 Zeichen lang sein.' });
+    required(s.shippingAddress.postalCode, { message: 'PLZ ist erforderlich.' });
+    minLength(s.shippingAddress.postalCode, 2, { message: 'PLZ muss mindestens 2 Zeichen lang sein.' });
+    required(s.shippingAddress.country, { message: 'Land ist erforderlich.' });
+    minLength(s.shippingAddress.country, 2, { message: 'Land muss mindestens 2 Zeichen lang sein.' });
   });
 
   constructor() {
@@ -111,8 +95,6 @@ export class CheckoutPage {
   protected readonly cart = computed(() => this.cartResource().data);
   protected readonly cartItems = computed(() => this.cart().items);
   protected readonly hasCartItems = computed(() => this.cartItems().length > 0);
-
-  protected readonly shippingAddressForm = computed(() => this.checkoutForm.controls.shippingAddress);
 
   protected updateItemQuantity(item: CartItem): void {
     const draftQuantity = this.quantityDrafts()[item.itemId];
@@ -197,34 +179,32 @@ export class CheckoutPage {
       return;
     }
 
-    if (this.checkoutForm.invalid) {
-      this.checkoutForm.markAllAsTouched();
-      return;
-    }
+    submit(this.checkoutForm, async () => {
+      this.isSubmittingCheckout.set(true);
+      this.checkoutErrorMessage.set(null);
+      this.cartMessage.set(null);
+      this.checkoutResult.set(null);
 
-    this.isSubmittingCheckout.set(true);
-    this.checkoutErrorMessage.set(null);
-    this.cartMessage.set(null);
-    this.checkoutResult.set(null);
+      const { paymentMethod, shippingAddress } = this.checkoutModel();
 
-    const { paymentMethod, shippingAddress } = this.checkoutForm.getRawValue();
-
-    this.checkoutApiService
-      .checkout({
-        paymentMethod,
-        shippingAddress
-      })
-      .subscribe({
-        next: (response) => {
-          this.isSubmittingCheckout.set(false);
-          this.checkoutResult.set(response.data);
-          this.refreshCart();
-        },
-        error: () => {
-          this.isSubmittingCheckout.set(false);
-          this.checkoutErrorMessage.set('Checkout ist fehlgeschlagen. Bitte pruefe deine Angaben.');
-        }
+      await new Promise<void>((resolve, reject) => {
+        this.checkoutApiService
+          .checkout({ paymentMethod, shippingAddress })
+          .subscribe({
+            next: (response) => {
+              this.isSubmittingCheckout.set(false);
+              this.checkoutResult.set(response.data);
+              this.refreshCart();
+              resolve();
+            },
+            error: () => {
+              this.isSubmittingCheckout.set(false);
+              this.checkoutErrorMessage.set('Checkout ist fehlgeschlagen. Bitte pruefe deine Angaben.');
+              reject();
+            }
+          });
       });
+    });
   }
 
   protected logout(): void {
@@ -237,10 +217,6 @@ export class CheckoutPage {
 
   protected formatPrice(price: number, currency: string): string {
     return `${this.numberFormatter.format(price)} ${this.currencyLabel(currency)}`;
-  }
-
-  protected hasFieldError(field: FormControl<string>): boolean {
-    return field.invalid && (field.dirty || field.touched);
   }
 
   protected trackByCartItemId(_index: number, item: CartItem): string {
