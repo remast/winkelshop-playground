@@ -39,13 +39,6 @@ Persistence mappings
 * Nutze var Keyword, Records
 * funktionaler Style mit Streams statt Schleifen
 
-
-## Test Konventionen
-
-* Nutze Arrange/Act/Assert Pattern
-* Nutze Hamcrest Matcher
-
-
 ## Build
 
 Nutze Build Tool Maven mit `mvnw` Wrapper für Build und Test
