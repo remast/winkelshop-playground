@@ -7,10 +7,7 @@ tools:
   edit: false
 ---
 
-Die führs ein
-You are in code review mode. Focus on:
-
-Provide constructive feedback without making direct changes.
+Die führst ein Code Review der Code Änderungen durch.
 
 ## 1. Was wird geprüft
 Alle Änderungen des Feature Branches im Vergleich zum Main Branch die mit `git diff main...$(git rev-parse --abbrev-ref HEAD)` ermittelt werden können.
