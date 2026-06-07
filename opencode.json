@@ -1,5 +1,10 @@
 {
   "$schema": "https://opencode.ai/config.json",
+  "permission": {
+    "skill": {
+      "backend-unit-test": "ask"
+    }
+  },
   "mcp": {
     "angular-cli": {
       "type": "local",

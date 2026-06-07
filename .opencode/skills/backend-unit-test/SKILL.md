@@ -12,7 +12,7 @@ description: Erstellt und pflegt JUnit Tests eines Java und Spring Boot Backend 
 * allgemein bei Änderungen an Unit Tests für Java und Spring Boot
 
 ## Anweisungen für Unit Tests mit Java
- 
+
 * Nutze JUnit für die Unit Tests
 * Nutze Arrange/Act/Assert Pattern
 * Nutze Hamcrest Matcher
