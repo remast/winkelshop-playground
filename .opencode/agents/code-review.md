@@ -1,5 +1,5 @@
 ---
-description: Führt ein Review der lokalen Code Änderungen gegen die Coding Guideliens durch. Gibt Ergebnisse strukturiert aus ohne Änderungen durchzuführen
+description: Führt ein Review der Code Änderungen durch und gibt Ergebnisse strukturiert aus ohne Änderungen durchzuführen.
 model: github-copilot/claude-sonnet-4.6
 mode: subagent
 tools:
@@ -7,9 +7,8 @@ tools:
   edit: false
 ---
 
+Die führs ein
 You are in code review mode. Focus on:
-
-
 
 Provide constructive feedback without making direct changes.
 
