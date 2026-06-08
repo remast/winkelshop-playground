@@ -1,0 +1,13 @@
+services:
+  opencode:
+    build: .
+    image: opencode-project
+    working_dir: /project
+    volumes:
+      # Mount the entire repo into the container so opencode can read and edit files
+      - .:/project
+    env_file:
+      # Copy .env.example → .env and fill in your API key(s)
+      - .env
+    stdin_open: true   # keep stdin open for the TUI
+    tty: true          # allocate a pseudo-TTY for the TUI

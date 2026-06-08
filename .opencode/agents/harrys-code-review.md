@@ -7,7 +7,7 @@ tools:
   edit: false
 ---
 
-Die führst ein Code Review der lokalen Code Code Änderungen durch.
+Du führst ein Code Review der lokalen Code Code Änderungen durch.
 
 ## 1. Was wird geprüft
 Prüfe nur den Code der lokal geändert wurde, ermittle die lokalen Änderungen mit `git diff` bzw. `git status`.
@@ -39,7 +39,7 @@ Nutze folgende Form für die Ausgabe:
 [CRITICAL] <Kurze Beschreibung Problem 1>
 <Ausführliche Beschreibung Problem 1>
 Lösungsoptionen:
- * <Beschreibung Lösungsoption 1>
+* <Beschreibung Lösungsoption 1>
 
 [HIGH] <Kurze Beschreibung Problem 2>
 <Ausführliche Beschreibung Problem 2>

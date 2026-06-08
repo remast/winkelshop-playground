@@ -1,0 +1,23 @@
+# Exclude files that don't need to be in the Docker build context.
+# The project itself is mounted at runtime via a volume, not baked into the image.
+
+# Dependencies and build output
+**/node_modules
+**/dist
+**/.angular
+**/build
+**/.gradle
+**/.m2
+**/target
+
+# Git and IDE metadata
+.git
+.idea
+*.iml
+
+# Secrets
+.env
+
+# OS noise
+.DS_Store
+Thumbs.db

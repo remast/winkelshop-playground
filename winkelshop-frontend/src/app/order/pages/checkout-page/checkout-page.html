@@ -102,84 +102,69 @@
     <section class="checkout-panel" aria-labelledby="checkout-form-title">
       <h2 id="checkout-form-title">🪄 Versand und Zahlung</h2>
 
-      <form (submit)="submitCheckout(); $event.preventDefault()" novalidate>
+      <form [formGroup]="checkoutForm" (ngSubmit)="submitCheckout()" novalidate>
         <div class="form-field">
           <label for="payment-method">💳 Zahlungsart</label>
-          <select id="payment-method" [formField]="checkoutForm.paymentMethod">
+          <select id="payment-method" formControlName="paymentMethod">
             <option value="credit-card">Kreditkarte</option>
             <option value="invoice">Rechnung</option>
           </select>
         </div>
 
-        <div class="shipping-grid">
+        <div class="shipping-grid" formGroupName="shippingAddress">
           <div class="form-field">
-            <label for="fullName">👤 Vollstaendiger Name</label>
+             <label for="fullName">👤 Vollstaendiger Name</label>
             <input
               id="fullName"
               type="text"
+              formControlName="fullName"
               autocomplete="name"
-              [formField]="checkoutForm.shippingAddress.fullName"
-              [attr.aria-invalid]="checkoutForm.shippingAddress.fullName().touched() && checkoutForm.shippingAddress.fullName().invalid()"
+              [attr.aria-invalid]="hasFieldError(shippingAddressForm().controls.fullName)"
             />
-            @if (checkoutForm.shippingAddress.fullName().touched() && checkoutForm.shippingAddress.fullName().errors().length) {
-              <span class="field-error" role="alert">{{ checkoutForm.shippingAddress.fullName().errors()[0].message }}</span>
-            }
           </div>
 
           <div class="form-field">
-            <label for="street">🛣️ Strasse</label>
+             <label for="street">🛣️ Strasse</label>
             <input
               id="street"
               type="text"
+              formControlName="street"
               autocomplete="street-address"
-              [formField]="checkoutForm.shippingAddress.street"
-              [attr.aria-invalid]="checkoutForm.shippingAddress.street().touched() && checkoutForm.shippingAddress.street().invalid()"
+              [attr.aria-invalid]="hasFieldError(shippingAddressForm().controls.street)"
             />
-            @if (checkoutForm.shippingAddress.street().touched() && checkoutForm.shippingAddress.street().errors().length) {
-              <span class="field-error" role="alert">{{ checkoutForm.shippingAddress.street().errors()[0].message }}</span>
-            }
           </div>
 
           <div class="form-field">
-            <label for="city">🏙️ Stadt</label>
+             <label for="city">🏙️ Stadt</label>
             <input
               id="city"
               type="text"
+              formControlName="city"
               autocomplete="address-level2"
-              [formField]="checkoutForm.shippingAddress.city"
-              [attr.aria-invalid]="checkoutForm.shippingAddress.city().touched() && checkoutForm.shippingAddress.city().invalid()"
+              [attr.aria-invalid]="hasFieldError(shippingAddressForm().controls.city)"
             />
-            @if (checkoutForm.shippingAddress.city().touched() && checkoutForm.shippingAddress.city().errors().length) {
-              <span class="field-error" role="alert">{{ checkoutForm.shippingAddress.city().errors()[0].message }}</span>
-            }
           </div>
 
           <div class="form-field">
-            <label for="postalCode">📮 PLZ</label>
+             <label for="postalCode">📮 PLZ</label>
             <input
               id="postalCode"
               type="text"
+              formControlName="postalCode"
               autocomplete="postal-code"
-              [formField]="checkoutForm.shippingAddress.postalCode"
-              [attr.aria-invalid]="checkoutForm.shippingAddress.postalCode().touched() && checkoutForm.shippingAddress.postalCode().invalid()"
+              [attr.aria-invalid]="hasFieldError(shippingAddressForm().controls.postalCode)"
             />
-            @if (checkoutForm.shippingAddress.postalCode().touched() && checkoutForm.shippingAddress.postalCode().errors().length) {
-              <span class="field-error" role="alert">{{ checkoutForm.shippingAddress.postalCode().errors()[0].message }}</span>
-            }
           </div>
 
           <div class="form-field shipping-country">
-            <label for="country">🌍 Land</label>
+             <label for="country">🌍 Land</label>
             <input
               id="country"
               type="text"
+              formControlName="country"
               autocomplete="country-name"
-              [formField]="checkoutForm.shippingAddress.country"
-              [attr.aria-invalid]="checkoutForm.shippingAddress.country().touched() && checkoutForm.shippingAddress.country().invalid()"
+              [attr.aria-invalid]="hasFieldError(shippingAddressForm().controls.country)"
             />
-            @if (checkoutForm.shippingAddress.country().touched() && checkoutForm.shippingAddress.country().errors().length) {
-              <span class="field-error" role="alert">{{ checkoutForm.shippingAddress.country().errors()[0].message }}</span>
-            }
           </div>
         </div>
 
