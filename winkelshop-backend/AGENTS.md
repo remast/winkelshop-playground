@@ -44,7 +44,7 @@ Persistence mappings
 
 * Nutze Arrange/Act/Assert Pattern
 * Nutze Hamcrest Matcher
-
+* Führe Tests aus mit `mvnw -q test`
 
 ## Build
 

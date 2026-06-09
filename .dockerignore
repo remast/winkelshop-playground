@@ -21,3 +21,7 @@
 # OS noise
 .DS_Store
 Thumbs.db
+
+# Docker Files
+Dockerfile
+docker-compose.yml

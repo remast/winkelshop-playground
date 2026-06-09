@@ -1,7 +1,7 @@
 services:
-  opencode:
+  opencode-sandbox:
     build: .
-    image: opencode-project
+    image: opencode-sandbox
     working_dir: /project
     volumes:
       # Mount the entire repo into the container so opencode can read and edit files

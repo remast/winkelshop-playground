@@ -1,5 +1,32 @@
 {
   "$schema": "https://opencode.ai/config.json",
+  // "share": "disabled",
+  // "enabled_providers": [
+  //   "github-copilot"
+  // ],
+  "permission": {
+    //"webfetch": "deny",
+    "read": {
+      "*": "allow",
+      "*.env": "deny",
+      "*.env.*": "ask"
+    },
+    "edit": {
+      // Allow for agentic flow — .env files remain protected
+      "*": "ask",
+      "*.env": "deny",
+      "*.env.*": "deny"
+    }
+    // "bash": {
+    //   "*": "ask",
+    //    "rm *": "ask"
+    // },
+    // --- Jira MCP: read allow, write ask ---
+    // "jira_*": "ask",
+    // "jira_get*": "allow",
+    // "jira_search": "allow",
+    // "jira_download*": "allow"
+  },
   "mcp": {
     "angular-cli": {
       "type": "local",
