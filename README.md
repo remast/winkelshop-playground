@@ -1,9 +1,11 @@
-# Winkelshop KI Playground
+# 🧙‍♂️ Winkelshop KI Playground
 
-## Docker Sandbox Usage
+## 🏖️ Docker Sandbox Usage
 
-    // Build Opencode Sandbox
-    docker compose build
+```bash
+ // Build Opencode Sandbox
+ docker compose build
 
-    // Run Opencode Sandbox
-    docker compose run --rm opencode-sandbox
+ // Run Opencode Sandbox
+ docker compose run --rm opencode-sandbox
+ ```
